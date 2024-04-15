@@ -5,3 +5,6 @@
 # ignore virtual environment local directory
 env/
 
+# ignore data directory
+data/
+
