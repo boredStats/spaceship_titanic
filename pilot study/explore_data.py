@@ -18,3 +18,21 @@ def split_cabin_label(cabin_string):
 df_clean = clean_data(df)
 df_pure = df_clean.dropna(axis=0, how="any")
 df_pure.to_csv("pilot_pure.csv")
+
+vars_of_interest = ['HomePlanet', 'CryoSleep', 'Cabin', 'Destination', 'VIP','Transported'] 
+df_test = df_pure[vars_of_interest]
+
+x, y, z = [], [], []
+for i in range(len(df_test.index)):
+    g = df_test['Cabin'].iloc[i]
+    val = split_cabin_label(g)
+    x.append(val[0])
+    y.append(val[1])
+    z.append(val[2])
+
+df_test.drop('Cabin', axis=1)
+df_test.insert(5,'CabinDeck', x)
+df_test.insert(6,'CabinNum', y)
+df_test.insert(7, 'CabinSide', z)
+
+df_test.to_csv("pilot_test.csv")
