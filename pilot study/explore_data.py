@@ -12,7 +12,7 @@ def split_cabin_label(cabin_string):
     # Splits "Cabin" variable into three variables
     # get cabin_string using df.loc[index, "Cabin"]
     cabin_list = cabin_string.split("/")
-    cabin_list[1] = int(cabin_list[1])
+    # cabin_list[1] = int(cabin_list[1]) # keeping cabin number as a nominal variable
     return cabin_list
 
 df_clean = clean_data(df)
