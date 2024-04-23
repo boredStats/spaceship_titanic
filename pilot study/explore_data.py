@@ -30,9 +30,9 @@ for i in range(len(df_test.index)):
     y.append(val[1])
     z.append(val[2])
 
-df_test.drop('Cabin', axis=1)
-df_test.insert(5,'CabinDeck', x)
-df_test.insert(6,'CabinNum', y)
-df_test.insert(7, 'CabinSide', z)
+df_test.drop(columns='Cabin', inplace=True)
+df_test.insert(4,'CabinDeck', x)
+# df_test.insert(6,'CabinNum', y) # removing cabin number variable
+df_test.insert(5, 'CabinSide', z)
 
 df_test.to_csv("pilot_test.csv")
