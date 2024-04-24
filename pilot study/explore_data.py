@@ -19,7 +19,7 @@ def split_cabin_label(cabin_string):
         cabin_side = cabin_list[2]
         return cabin_deck, cabin_side
     
-cd_list, cs_list, z = [], [], []
+cd_list, cs_list= [], []
 for i in range(len(df_test.index)):
     g = df_test['Cabin'].iloc[i]
     x, y = split_cabin_label(g)
@@ -32,4 +32,14 @@ df_test.insert(5, 'CabinSide', cs_list)
 
 df_test.to_csv("pilot_test.csv")
 
-print(df_test.describe())
+df_test.fillna(value='_MissingValue', inplace=True)
+
+z = pd.crosstab(df_test['Transported'], df_test['HomePlanet'])
+
+for i, v in enumerate(df_test.columns):
+    if v == 'Transported':
+        break
+    else:
+        contingency_table = pd.crosstab(df_test['Transported'], df_test[v])
+        fname = "contingency_table_%s.csv" % v
+        contingency_table.to_csv(fname)
