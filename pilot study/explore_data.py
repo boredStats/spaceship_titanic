@@ -1,5 +1,8 @@
 import numpy as np
 import pandas as pd
+import matplotlib.pyplot as plt
+import matplotlib as mpl
+import seaborn as sns
 
 df = pd.read_csv("pilot.csv")
 
@@ -32,14 +35,40 @@ df_test.insert(5, 'CabinSide', cs_list)
 
 df_test.to_csv("pilot_test.csv")
 
-df_test.fillna(value='_MissingValue', inplace=True)
+'''Colormap testing lol
+# cmap = sns.cm.rocket_r
+# cmap = sns.dark_palette("#69d", reverse=True, as_cmap=True)
+# cmap = sns.light_palette("seagreen", as_cmap=True)
+'''
+cmap = sns.color_palette("YlOrBr", as_cmap=True)
 
-z = pd.crosstab(df_test['Transported'], df_test['HomePlanet'])
-
-for i, v in enumerate(df_test.columns):
+for v in df_test.columns:
     if v == 'Transported':
         break
     else:
         contingency_table = pd.crosstab(df_test['Transported'], df_test[v])
+        contingency_table.to_csv("contingency_table_%s.csv" % v)
+        ax = sns.heatmap(contingency_table, annot=True, fmt='d', cmap=cmap)
+        fig = ax.get_figure()
+        fig.savefig("heatmap_%s.png" % v)
+        plt.clf()
+
+# pandas crosstab does not include NaN as a category, code below is for considering NaN as a variable level
+''' 
+df_test.fillna(value='_MissingValue', inplace=True) # replacing NaN with string for later
+
+c_tables = []
+for v in df_test.columns:
+    if v == 'Transported':
+        break
+    else:
+        contingency_table = pd.crosstab(df_test['Transported'], df_test[v])
+        c_tables.append(contingency_table)
         fname = "contingency_table_%s.csv" % v
         contingency_table.to_csv(fname)
+
+test = c_tables[2]
+
+sns.heatmap(test,annot=True, fmt='d')
+plt.show()
+'''
