@@ -1,9 +1,11 @@
+# -*- coding: utf-8 -*-
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 import matplotlib as mpl
 import seaborn as sns
 import sklearn.tree as sktree
+import sklearn.preprocessing as preprocessing
 
 df = pd.read_csv("pilot.csv")
 
@@ -34,7 +36,22 @@ df_test.drop(columns='Cabin', inplace=True)
 df_test.insert(4,'CabinDeck', cd_list)
 df_test.insert(5, 'CabinSide', cs_list)
 
-df_test.to_csv("pilot_test.csv")
+# df_test.to_csv("pilot_test.csv")
+
+xvars = list(df_test.columns[:-1])
+
+df2 = df_test.copy(deep=True)
+encoder = preprocessing.OneHotEncoder(sparse_output=False)
+encoded_data = encoder.fit_transform(df2[xvars].values)
+encoded_features = encoder.get_feature_names_out(input_features=xvars)
+df3 = pd.DataFrame(encoded_data, columns=encoded_features)
+df3['Transported'] = df2['Transported'].values.astype(int)
+df3.to_csv('pilot_encoded.csv')
+
+#clf = sktree.DecisionTreeClassifier(random_state=2)
+#clf.fit(df2[xvars], df_test[y])
+#sktree.plot_tree(clf)
+#plt.show()
 
 '''Colormap testing lol
 # cmap = sns.cm.rocket_r
@@ -75,15 +92,3 @@ test = c_tables[2]
 sns.heatmap(test,annot=True, fmt='d')
 plt.show()
 '''
-
-xvars = list(df_test.columns[:-1])
-y = ['Transported']
-
-df2 = df_test.copy(deep=True)
-
-    
-clf = sktree.DecisionTreeClassifier(random_state=2)
-clf.fit(df2[xvars], df_test[y])
-sktree.plot_tree(clf)
-plt.show()
-
