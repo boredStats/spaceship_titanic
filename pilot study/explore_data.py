@@ -81,35 +81,6 @@ y = ['Transported']
 
 df2 = df_test.copy(deep=True)
 
-def encode_target(df, target_column):
-    """Add column to df with integers for the target.
-
-    Args
-    ----
-    df -- pandas DataFrame.
-    target_column -- column to map to int, producing
-                     new Target column.
-
-    Returns
-    -------
-    df_mod -- modified DataFrame.
-    targets -- list of target names.
-    """
-    df_mod = df.copy()
-    targets = df_mod[target_column].unique()
-    map_to_int = {name: n for n, name in enumerate(targets)}
-    df_mod[target_column] = df_mod[target_column].replace(map_to_int)
-
-    return (df_mod, targets)
-
-
-for x in xvars:
-    #a, _ = encode_target(df2, x)
-    targets = df2[x].unique()
-    map_to_int = {name: n for n, name in enumerate(targets)}
-    df2[x] = df2[x].replace(map_to_int)
-
-    #print(a.head())
     
 clf = sktree.DecisionTreeClassifier(random_state=2)
 clf.fit(df2[xvars], df_test[y])
