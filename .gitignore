@@ -1,10 +1,9 @@
-# ignore data files
-*.csv
-*.zip
-
 # ignore virtual environment local directory
 env/
 
-# ignore data directory
-data/
+# ignore __pycache__
+**/__pycache__/
+
+# ignore vscode workspace
+*.code-workspace
 
